@@ -30,7 +30,6 @@ void BubbleSort(int n);
 void Merge(int left, int mid, int right);
 void MergeSort(int left, int right);
 void SortingControl();
-void MergeSort(int left, int right);
 
 //void  ReadRandomData();
 
@@ -94,26 +93,35 @@ void DisplayData(LibraryRecord record[10000])
     cout << string(5, '\t') << "|                                              Library Record Data                                      |" << endl;
     cout << string(5, '\t') << "=========================================================================================================" << endl;
     cout << string(5, '\t');
-    printf("|%10s|%10s|%10s|%8s|%10s|%15s|%20s|%11s|", "StudentID", "IssueDate", "DueDate", "ReturnDate", "FineAmount", "Renewal Count", "Reservation Status","BookID");
-    cout << "\n" << string(5, '\t') << "========================================================================================================" << endl;
-    for (int i = 0; i < 100; i++)//loop first 100 data
-    {
-        cout << string(5, '\t');
-        cout << "|" << left << setw(10) << record[i].StudentID;
-        cout << "|" << left << setw(10) << record[i].IssueDate;
-        cout << "|" << left << setw(10) << record[i].DueDate;
-        cout << "|" << left << setw(8) << record[i].ReturnDate;
-        cout << "|" << left << setw(10) << record[i].FineAmount;
-        cout << "|" << left << setw(15) << record[i].RenewalCount;
-        cout << "|" << left << setw(20) << record[i].ReservationStatus ;
-        cout << "|" << left << setw(11) << record[i].BookID << "|";
-        cout << endl;
-
-    }
+    cout << "|" << left << setw(10) << "StudentID";
+    cout << "|" << left << setw(10) << "IssueDate";
+    cout << "|" << left << setw(10) << "DueDate";
+    cout << "|" << left << setw(8) << "ReturnDate";
+    cout << "|" << left << setw(10) << "FineAmount";
+    cout << "|" << left << setw(15) << "Renewal Count";
+    cout << "|" << left << setw(20) << "Reservation Status";
+    cout << "|" << left << setw(11) << "BookID" << "|" << endl;
     cout << string(5, '\t') << "=========================================================================================================" << endl;
 
-
+    for (int i = 0; i < 100; i++) // Loop through the first 100 data
+    {
+        // Check if the record contains valid data
+        if (!record[i].StudentID.empty()) // Assuming StudentID is a string
+        {
+            cout << string(5, '\t');
+            cout << "|" << left << setw(10) << record[i].StudentID;
+            cout << "|" << left << setw(10) << record[i].IssueDate;
+            cout << "|" << left << setw(10) << record[i].DueDate;
+            cout << "|" << left << setw(8) << record[i].ReturnDate;
+            cout << "|" << left << setw(10) << record[i].FineAmount;
+            cout << "|" << left << setw(15) << record[i].RenewalCount;
+            cout << "|" << left << setw(20) << record[i].ReservationStatus;
+            cout << "|" << left << setw(11) << record[i].BookID << "|" << endl;
+        }
+    }
+    cout << string(5, '\t') << "=========================================================================================================" << endl;
 }
+
 
 
 void ReadLibraryRecord()
@@ -284,17 +292,18 @@ void ExecuteSorting(int option)
 
         // Calculate the elapsed time between the start and end using the difference between the two times.
         elapsed_seconds = end - start;
-        cout << "Error" << endl;
         
     }
 
 
     system("cls");
     cout << string(10, '\n');
-    try {
+    try 
+    {
         DisplayData(record);
     }
-    catch (const exception& e) {
+    catch (const exception& e)
+    {
         cerr << "Error in DisplayData: " << e.what() << endl;
         throw;
     }
@@ -331,66 +340,71 @@ void BubbleSort(int n)
 }
 void MergeSort(int left, int right)
 {
-    int mid = (left + right) / 2;
     if (left < right)
     {
-        MergeSort(left, mid); //first half sub array
-        MergeSort(mid + 1, right); //second half sub array
+        int mid = left + (right - left) / 2;
+
+        MergeSort(left, mid);
+        MergeSort(mid + 1, right);
+
         Merge(left, mid, right);
     }
 }
 
 
 
+
 void Merge(int left, int mid, int right)
 {
-    LibraryRecord temp[10000];
-    // left -> first element 
-    // right -> last element
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
 
-    int i = left; //index of left sub array
-    int j = mid + 1; //index of right sub array
-    int k = left; //index of array
+    // Create temporary arrays
+    LibraryRecord* leftArray = new LibraryRecord[n1];
+    LibraryRecord* rightArray = new LibraryRecord[n2];
 
-    // Merge two subarrays into temp
-    while (i <= mid && j <= right)
-    {
-        if (record[i].StudentID <= record[j].StudentID)
-        {
-            temp[k] = record[i];
+    // Copy data to temp arrays
+    for (int i = 0; i < n1; i++) {
+        leftArray[i] = record[left + i];
+    }
+    for (int j = 0; j < n2; j++) {
+        rightArray[j] = record[mid + 1 + j];
+    }
+
+    // Merge the temp arrays back into record[left...right]
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (leftArray[i].StudentID <= rightArray[j].StudentID) {
+            record[k] = leftArray[i];
             i++;
-            k++;
         }
-        else
-        {
-            temp[k] = record[j];
+        else {
+            record[k] = rightArray[j];
             j++;
-            k++;
         }
+        k++;
         loopCount++;
     }
 
-    //copy remaining element from left to temp
-    while (i <= mid)
-    {
-        temp[k] = record[i];
+    // Copy remaining elements of leftArray
+    while (i < n1) {
+        record[k] = leftArray[i];
         i++;
         k++;
     }
 
-    //copy remaining element from right to temp
-    while (j <= right)
-    {
-        temp[k] = record[j];
+    // Copy remaining elements of rightArray
+    while (j < n2) {
+        record[k] = rightArray[j];
         j++;
         k++;
     }
 
-    //copy element from temp to original array
-    for (int m = left; m <= right; m++)
-    {
-        record[m] = temp[m];
-    }
+    // Free dynamically allocated memory
+    delete[] leftArray;
+    delete[] rightArray;
 }
+
+
 
 
