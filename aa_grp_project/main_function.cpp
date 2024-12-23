@@ -31,12 +31,18 @@ void Merge(int left, int mid, int right);
 void MergeSort(int left, int right);
 void SortingControl();
 void UnsortData();
+void Swap(LibraryRecord& x, LibraryRecord& y);
+
 //void  ReadRandomData();
 
 //Searching relevant functions
 void ExecuteSearching(int option);
+void BubbleSortForBinarySearch(string randomData[], int n);
+void BubbleSortForBook(int n);
 void SearchingControl();
 int LinearSearch(string k);
+int ImprovedLinearSearch(string k);
+int BinarySearch(string target);
 int loopCount;
 
 
@@ -106,14 +112,19 @@ void ReadRandomData()
     fstream fin;
     string s;
 
-    fin.open("random_data.csv", ios::in); // Open the file in read mode
+    fin.open("random_data2.csv", ios::in); // Open the file in read mode
 
-    for (int i = 0; i < 100 && getline(fin, s); i++) // Read up to 100 lines or until EOF
+    // Skip the title/header row
+    getline(fin, s);
+
+    // Read up to 100 lines of actual data 
+    for (int i = 0; i < 9999 && getline(fin, s); i++)
     {
         randomData[i] = s; // Store the string directly into the array
     }
 
     fin.close(); // Close the file
+
 }
 void DisplayData(LibraryRecord record[10000])
 {
@@ -217,10 +228,13 @@ void ReadLibraryRecord()
 }
 
 
-
-
-
-
+void Swap(LibraryRecord & x, LibraryRecord& y)
+{
+    LibraryRecord  temp = x;
+    x = y;
+    y = temp;
+    loopCount++;
+}
 
 void SortingControl()
 {
@@ -334,13 +348,13 @@ void ExecuteSorting(int option)
     system("pause");
     SortingControl();
 }
-
-void Swap(LibraryRecord& x, LibraryRecord& y)
+// Swap function definition
+template <typename T>
+void Swap(T& a, T& b) 
 {
-    LibraryRecord temp = x;
-    x = y;
-    y = temp;
-    loopCount++;
+    T temp = a;
+    a = b;
+    b = temp;
 }
 
 void BubbleSort(int n)
@@ -356,6 +370,21 @@ void BubbleSort(int n)
         }
     }
 }
+void BubbleSortForBook(int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int k = 0; k < n - i - 1; k++)
+        {
+            if (record[k].BookID > record[k + 1].BookID)
+            {
+                swap(record[k], record[k + 1]);
+            }
+        }
+    }
+}
+
+
 void MergeSort(int left, int right)
 {
     if (left < right)
@@ -366,6 +395,20 @@ void MergeSort(int left, int right)
         MergeSort(mid + 1, right);
 
         Merge(left, mid, right);
+    }
+}
+
+void BubbleSortForBinarySearch(string randomData[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int k = 0; k < n - i - 1; k++)
+        {
+            if (randomData[k] > randomData[k + 1]) // Compare strings lexicographically
+            {
+                swap(randomData[k], randomData[k + 1]); // Use built-in swap for strings
+            }
+        }
     }
 }
 
@@ -515,12 +558,14 @@ void ExecuteSearching(int option)
 
         for (int i = 0; i < 100; i++)
         {
-            // Uncomment and modify appropriately for binary search
-            /*
+
+            BubbleSortForBinarySearch(randomData, 100);
+            BubbleSortForBook(10000);
+
             index = BinarySearch(randomData[i]);
             info[i][0] = randomData[i];
             info[i][1] = (index == -1) ? "Not Found" : to_string(index);
-            */
+            
         }
 
         auto end = chrono::system_clock::now();
@@ -532,12 +577,12 @@ void ExecuteSearching(int option)
 
         for (int i = 0; i < 100; i++)
         {
-            // Uncomment and modify appropriately for improved linear search
-            /*
+            
+            
             index = ImprovedLinearSearch(randomData[i]);
             info[i][0] = randomData[i];
             info[i][1] = (index == -1) ? "Not Found" : to_string(index);
-            */
+            
         }
 
         auto end = chrono::system_clock::now();
@@ -545,7 +590,7 @@ void ExecuteSearching(int option)
     }
 
     cout << string(9, '\t') << "=====================================" << endl;
-    cout << string(9, '\t') << "|         LIBRARY  DATA              |" << endl;
+    cout << string(9, '\t') << "|         BOOK   DATA               |" << endl;
     cout << string(9, '\t') << "=====================================" << endl;
     cout << string(9, '\t');
     printf("|%10s|%18s|%5s|", "BookID", "Is Found/Not Found", "Index");
@@ -575,19 +620,67 @@ void ExecuteSearching(int option)
     cout << string(10, '\n');
 }
 
-
-
-int LinearSearch(string k)
+int BinarySearch(string target)
 {
-    int i;
-    for (i = 0; i < 10000; i++)
+    int first = 0;
+    int last = 9999;
+
+    while (first <= last)
     {
-        if (k == record[i].BookID)
+        int mid = (first + last) / 2;
+
+        if (target > record[mid].BookID)
         {
-            return i;
+            first = mid + 1;
+        }
+        else if (target < record[mid].BookID)
+        {
+            last = mid - 1;
+        }
+        else
+        {
+            //target found
+            return mid;
         }
     }
 
+    //target not found
     return -1;
 }
 
+
+// Function to perform linear search
+int LinearSearch(string k)
+{
+    int i;
+    // Iterate through the record array
+    for (i = 0; i < 10000; i++)
+    {
+        if (k == record[i].BookID) // Check if the  BookID in randomData array matches the BookID in record array
+        {
+            return i;             // Return index if found
+        }
+    }
+
+    return -1; // Return -1 if not found
+}
+
+int ImprovedLinearSearch(string k)
+{
+    int left = 0;
+    int right = 9999;
+    while (left <= right)
+    {
+        if (k == record[left].BookID)
+        {
+            return left;
+        }
+        if (k == record[right].BookID)
+        {
+            return right;
+        }
+        left++;
+        right--;
+    }
+    return -1;
+}
