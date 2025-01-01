@@ -1026,7 +1026,7 @@ void summarizeRenewalCount()
 
     // Print the renewal count summaries in a tabular form
     cout << string(9, '\t');
-    printf("|%20d|%10d|\n", 1, renewalCount0);
+    printf("|%20d|%10d|\n", 0, renewalCount0);
     cout << string(9, '\t');
     printf("|%20d|%10d|\n", 1, renewalCount1);
     cout << string(9, '\t');
