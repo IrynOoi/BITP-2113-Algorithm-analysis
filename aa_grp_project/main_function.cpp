@@ -1004,10 +1004,10 @@ void summarizeRenewalCount()
         if (record[i].RenewalCount == 0) {
             renewalCount0++;
         }
-        else if (record[i].RenewalCount == 1) {
+        else if (record[i].RenewalCount == 2) {
             renewalCount1++;
         }
-        else if (record[i].RenewalCount == 2) {
+        else if (record[i].RenewalCount == 3) {
             renewalCount2++;
         }
         else if (record[i].RenewalCount == 3) {
@@ -1026,7 +1026,7 @@ void summarizeRenewalCount()
 
     // Print the renewal count summaries in a tabular form
     cout << string(9, '\t');
-    printf("|%20d|%10d|\n", 0, renewalCount0);
+    printf("|%20d|%10d|\n", 1, renewalCount0);
     cout << string(9, '\t');
     printf("|%20d|%10d|\n", 1, renewalCount1);
     cout << string(9, '\t');
