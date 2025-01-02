@@ -786,7 +786,7 @@ void AnalysisControl()
     cout << string(9, '\t') << "[3] Display  the summary of count of renewal" << endl;
     cout << string(9, '\t') << "[4] Back" << endl;
 
-    cout << "\n\n" << string(9, '\t') << "Please enter your choice (Number 1 - 3 only): ";
+    cout << "\n\n" << string(9, '\t') << "Please enter your choice (Number 1 - 4 only): ";
 
     while (true)
     {
@@ -1004,10 +1004,10 @@ void summarizeRenewalCount()
         if (record[i].RenewalCount == 0) {
             renewalCount0++;
         }
-        else if (record[i].RenewalCount == 2) {
+        else if (record[i].RenewalCount == 1) {
             renewalCount1++;
         }
-        else if (record[i].RenewalCount == 3) {
+        else if (record[i].RenewalCount == 2) {
             renewalCount2++;
         }
         else if (record[i].RenewalCount == 3) {
