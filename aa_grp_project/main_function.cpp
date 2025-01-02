@@ -820,8 +820,7 @@ void AnalysisControl()
     }
 }
 
-
-// Function to display top 5 highest fines
+// Function to display top 5 highest fines and include calculations
 void DisplayTop5HighestFine()
 {
 
@@ -856,6 +855,7 @@ void DisplayTop5HighestFine()
     cout << "\n" << string(9, '\t') << "========================================================" << endl;
 
     int count = 0;  // Counter for displayed records
+    double totalFine = 0;  // Variable to store total fine amount
     for (int i = 0; i < 9999 && count < 5; i++)
     {
         if (record[i].FineAmount > 0)
@@ -867,20 +867,28 @@ void DisplayTop5HighestFine()
                 << "|" << left << setw(10) << record[i].DueDate
                 << "|" << left << setw(10) << record[i].ReturnDate << "|";
             cout << endl;
+
+            // Add the fine amount to the total fine
+            totalFine += record[i].FineAmount;
             count++;
         }
     }
 
+    // Calculate average fine
+    double averageFine = (count > 0) ? (totalFine / count) : 0;
+
+    // Display total and average fines
     cout << string(9, '\t') << "========================================================" << endl;
-    cout << "\n" << string(9, '\t') << "Please press 'Enter' to continue...";
+    cout << string(9, '\t') << "| Total Fine: " << setw(41) << totalFine << "|" << endl;
+    cout << string(9, '\t') << "| Average Fine: " << setw(39) << averageFine << "|" << endl;
+    cout << string(9, '\t') << "========================================================" << endl;
+
+    cout << "\n" << string(9, '\t');
 
     system("pause");
     AnalysisControl();
     cout << string(10, '\n');
-
 }
-
-
 void DisplayReservationCount()
 {
     // Track students who have been processed
