@@ -71,7 +71,7 @@ int main()
 
         cout << string(10, '\n');
         cout << string(9, '\t') << "***********************************" << endl;
-        cout << string(9, '\t') << "         MAIN MENU OF LIBRARY 123     " << endl;
+        cout << string(9, '\t') << "         MAIN MENU OF LIBRARY      " << endl;
         cout << string(9, '\t') << "***********************************" << endl;
         cout << string(9, '\t') << "[1] Display First 100 Data" << endl;
         cout << string(9, '\t') << "[2] Sorting" << endl;
